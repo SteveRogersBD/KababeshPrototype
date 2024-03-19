@@ -1,17 +1,21 @@
 package com.example.foodorderapp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.foodorderapp.DBHelper;
+import com.example.foodorderapp.DetailActivity;
 import com.example.foodorderapp.Models.OrderModel;
 import com.example.foodorderapp.R;
 
@@ -41,6 +45,27 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         holder.price.setText(model.getPrice());
         holder.itemName.setText(model.getSoldItemName());
         holder.itemImage.setImageResource(model.getOrderImage());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("id",Integer.parseInt(model.getOrderNumber()));
+                context.startActivity(intent);
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                DBHelper helper = new DBHelper(context);
+                if(helper.deleteOrder(model.getOrderNumber())>0)
+                {
+                    Toast.makeText(context, "Deleted!", Toast.LENGTH_SHORT).show();
+                }
+
+                return false;
+            }
+        });
 
     }
 

@@ -1,5 +1,6 @@
 package com.example.foodorderapp;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -20,18 +21,22 @@ public class OrderActivity extends AppCompatActivity {
         binding = ActivityOrderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ArrayList<OrderModel>list = new ArrayList<>();
-        list.add(new OrderModel(R.drawable.ctm,"Chicken Tikka Masala","15.00","123456"));
-        list.add(new OrderModel(R.drawable.bc,"Butter Chicken","15.00","123456"));
-        list.add(new OrderModel(R.drawable.jhal_farazi,"Chicken Jhal Farazi","15.00","123456"));
-        list.add(new OrderModel(R.drawable.tofu,"Tofu Curry","15.00","123456"));
-        list.add(new OrderModel(R.drawable.korma,"Chicken Korma","15.00","123456"));
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null)
+        {
+            actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimary));
+        }
+
+        DBHelper helper = new DBHelper(this);
+        ArrayList<OrderModel> list = helper.getOrders();
+
 
         OrderAdapter adapter = new OrderAdapter(list,this);
         binding.orderRecycle.setAdapter(adapter);
 
         LinearLayoutManager lm = new LinearLayoutManager(this);
         binding.orderRecycle.setLayoutManager(lm);
+
 
 
     }
